@@ -1,0 +1,30 @@
+.combat-container {
+  display: grid;
+  grid-template-areas:
+    "player enemies"
+    "field field";
+  grid-template-columns: 20% 80%;
+  grid-template-rows: 1fr 1.3fr;
+  height: 100vh;
+}
+
+.enemy-card {
+  margin: auto;
+  border: 1px solid black;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 12% 5%;
+  text-align: center;
+  width: 20vw;
+  box-sizing: border-box;
+}
+
+.hand-card {
+  box-sizing: border-box;
+  width: 13vw;
+  height: 12vw;
+  border: 1px solid black;
+  border-radius: 8px;
+  text-align: center;
+  padding: 1%;
+  margin: 1%;
+}
