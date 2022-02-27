@@ -1,19 +1,11 @@
 import React from "react";
+import cards from "../data/cards";
 
-const HandCard = (props) => {
-  const { name, cost, desc, key, tags } = props.card;
-  let style = {};
-
-  if (props.chosenCard.key === key) {
-    style = { border: "2px dashed white" };
-  }
+const Card = ({ name }) => {
+  let { desc, cost, tags } = cards.find((c) => c.name === name);
 
   return (
-    <div
-      className="hand-card"
-      style={style}
-      onClick={() => props.selectCard(props.card)}
-    >
+    <div className="hand-card">
       <header className="hand-card-top">
         <div className="hand-card-name">{name}</div>
       </header>
@@ -27,4 +19,4 @@ const HandCard = (props) => {
   );
 };
 
-export default HandCard;
+export default Card;

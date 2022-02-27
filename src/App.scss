@@ -19,12 +19,60 @@
 }
 
 .hand-card {
+  margin: 1vw;
   box-sizing: border-box;
-  width: 13vw;
-  height: 12vw;
+  width: 10vw;
+  height: 14vw;
   border: 1px solid black;
   border-radius: 8px;
   text-align: center;
   padding: 1%;
   margin: 1%;
+  background-color: #161925;
+  .hand-card-top {
+    display: flex;
+    justify-content: space-around;
+    background-color: #ffcf99;
+    color: #a33b20;
+  }
+  .hard-card-name {
+    font-weight: bold;
+  }
+  .hand-card-cost {
+    background-color: #048ba8;
+    color: #fff;
+    border: 1px solid black;
+    border-radius: 50%;
+    padding: 0.2em;
+    text-align: center;
+    width: 1.1vw;
+    height: 1.1vw;
+    position: relative;
+    bottom: 1.5vw;
+    left: 7.5vw;
+  }
+  .hand-card-image {
+    background-color: #fff;
+    height: 35%;
+    position: relative;
+    bottom: 1.5vw;
+    border-radius: 15%;
+  }
+  .hand-card-tags {
+    border: 1px solid #ffcf99;
+    position: relative;
+    bottom: 1.5vw;
+    font-size: 75%;
+    color: #fff;
+  }
+  .hand-card-desc {
+    position: relative;
+    bottom: 1.5vw;
+    font-size: 66%;
+    border: 1px solid black;
+    border-radius: 10%;
+    margin: 0.2vw;
+    height: 40%;
+    background-color: #ffc685;
+  }
 }

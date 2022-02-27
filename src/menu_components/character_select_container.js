@@ -1,12 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import CharacterCard from "./character_card";
+import Card from "./card_card";
 
 import { changeLocationAction } from "../utils/action_creators/game_states";
 import { setDeckAction } from "../utils/action_creators/deck";
 
 const CharacterSelectContainer = () => {
   const [cards, setCards] = React.useState([]);
+  const [card, setCard] = React.useState(null);
 
   let { characters } = useSelector((state) => state.characters);
   let currentRoster = useSelector((state) => state.deck.characters);
@@ -17,7 +19,7 @@ const CharacterSelectContainer = () => {
 
   const renderCharacterOptions = () => {
     let characterListItems = characters.map((c) => (
-      <CharacterCard character={c} showCards={showCards} />
+      <CharacterCard character={c} showCards={showCards} setCard={setCard} />
     ));
 
     return <div id="character-selection-container">{characterListItems}</div>;
@@ -25,7 +27,9 @@ const CharacterSelectContainer = () => {
 
   const renderCards = () => {
     if (cards.length) {
-      let cardItems = cards.map((card) => <li>{card}</li>);
+      let cardItems = cards.map((card) => (
+        <li onClick={() => setCard(card)}>{card}</li>
+      ));
 
       return <ul>{cardItems}</ul>;
     }
@@ -59,6 +63,12 @@ const CharacterSelectContainer = () => {
     );
   };
 
+  const viewCard = () => {
+    if (card) {
+      return <Card name={card} />;
+    }
+  };
+
   const startGame = (deck) => {
     changeLocationAction("map");
     setDeckAction(deck);
@@ -69,6 +79,7 @@ const CharacterSelectContainer = () => {
       {renderCharacterOptions()}
       {roster()}
       {renderCards()}
+      {viewCard()}
     </section>
   );
 };

@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { toggleCharacterAction } from "../utils/action_creators/deck";
 
-const CharacterCard = ({ character, showCards }) => {
+const CharacterCard = ({ character, showCards, setCard }) => {
   const selectedCharacters = useSelector((state) => state.deck.characters);
 
   const toggleCharacter = () => {
@@ -33,6 +33,11 @@ const CharacterCard = ({ character, showCards }) => {
       <br />
       <br />
       {toggleCharacter()}
+      <ul>
+        {character.cards.map((card) => (
+          <li onClick={() => setCard(card)}>{card}</li>
+        ))}
+      </ul>
     </div>
   );
 };
