@@ -5,6 +5,8 @@ import PlayingField from "./playing_field";
 import enemyData from "../data/enemies";
 import actionStyles from "../data/action_styles";
 
+import "./combat.scss";
+
 import { useSelector } from "react-redux";
 import {
   shuffleArray,
@@ -52,81 +54,103 @@ const CombatContainer = () => {
     setDifficulty(selectDifficulty[index].difficulty);
   }, []);
 
-  React.useEffect(async () => {
-    if (turn === "endPlayerTurn") {
-      setDiscardPile([...discardPile, ...hand]);
-      setHand([]);
-      setTurn("enemyTurn");
-    } else if (turn === "enemyTurn") {
-      let enemiesDupe = [...enemies];
-      for (let i = 0; i < enemiesDupe.length; i++) {
-        let enemy = enemiesDupe[i];
-        // grab enemy effect
-        let actions = actionStyles(
-          enemy.actionStyle,
-          difficulty,
-          enemy.modifier
-        );
-        let enemyAction = actions[enemy.attackIndex];
-        // calculate what they do
-        let result = resolveEnemyAction(enemyAction);
-        // update party
-        if (Object.keys(result.party).length) {
-          let updatedState = updateParty(result.party, { ...partyStats });
-          // >>> BUG <<<
-          // if the party has a shield, it doesn't get updated until after all the attacks go through
-          setPartyStats(updatedState);
+  React.useEffect(() => {
+    async function turnEffects() {
+      if (turn === "endPlayerTurn") {
+        setDiscardPile([...discardPile, ...hand]);
+        setHand([]);
+        setTurn("enemyTurn");
+      } else if (turn === "enemyTurn") {
+        let enemiesDupe = [...enemies];
+        for (let i = 0; i < enemiesDupe.length; i++) {
+          let enemy = enemiesDupe[i];
+          // grab enemy effect
+          let actions = actionStyles(
+            enemy.actionStyle,
+            difficulty,
+            enemy.modifier
+          );
+          let enemyAction = actions[enemy.attackIndex];
+          // calculate what they do
+          let result = resolveEnemyAction(enemyAction);
+          // update party
+          if (Object.keys(result.party).length) {
+            let updatedState = updateParty(result.party, { ...partyStats });
+            // >>> BUG <<<
+            // if the party has a shield, it doesn't get updated until after all the attacks go through
+            setPartyStats(updatedState);
+          }
+          // update enemy
+          let newAttackIndex =
+            enemy.attackIndex + 1 === actions.length
+              ? 0
+              : enemy.attackIndex + 1;
+          enemy.attackIndex = newAttackIndex;
+
+          await new Promise((r) => setTimeout(r, 500));
+          console.log(enemyAction.title);
         }
-        // update enemy
-        let newAttackIndex =
-          enemy.attackIndex + 1 === actions.length ? 0 : enemy.attackIndex + 1;
-        enemy.attackIndex = newAttackIndex;
+        // update enemies
 
-        await new Promise((r) => setTimeout(r, 500));
-        console.log(enemyAction.title);
-      }
-      // update enemies
+        setEnemies(enemiesDupe);
 
-      setEnemies(enemiesDupe);
-
-      // start playerTurn
-      setTurn("startPlayerTurn");
-    } else if (turn === "startPlayerTurn") {
-      let newHand = [];
-      let playerDeck = [...currentDeck];
-      let discardDupe = [...discardPile];
-      for (let i = 0; i < 5; i++) {
-        // check if deck has cards
-        if (!playerDeck.length) {
-          // shuffle
-          let shuffledDeck = shuffleArray(discardDupe);
-          // add cards from discard to deck
-          playerDeck = shuffledDeck;
-          discardDupe = [];
+        // start playerTurn
+        setTurn("startPlayerTurn");
+      } else if (turn === "startPlayerTurn") {
+        let newHand = [];
+        let playerDeck = [...currentDeck];
+        let discardDupe = [...discardPile];
+        for (let i = 0; i < 5; i++) {
+          // check if deck has cards
+          if (!playerDeck.length) {
+            // shuffle
+            let shuffledDeck = shuffleArray(discardDupe);
+            // add cards from discard to deck
+            playerDeck = shuffledDeck;
+            discardDupe = [];
+          }
+          // draw a card
+          newHand.push(playerDeck.shift());
         }
-        // draw a card
-        newHand.push(playerDeck.shift());
+        // reset
+        // clear discard pile if it was shuffled to make the new deck
+        if (!discardDupe.length) {
+          setDiscardPile(discardDupe);
+        }
+        // set deck without drawn cards
+        setCurrentDeck(playerDeck);
+        // set hand
+        setHand(newHand);
+        // reset mana
+        setMana(3);
+        // reset shields
+        setPartyStats({ ...partyStats, shield: 0 });
+        setTurn("player");
       }
-      // reset
-      // clear discard pile if it was shuffled to make the new deck
-      if (!discardDupe.length) {
-        setDiscardPile(discardDupe);
-      }
-      // set deck without drawn cards
-      setCurrentDeck(playerDeck);
-      // set hand
-      setHand(newHand);
-      // reset mana
-      setMana(3);
-      // reset shields
-      setPartyStats({ ...partyStats, shield: 0 });
-      setTurn("player");
     }
+    turnEffects();
   }, [turn]);
 
   // win condition
   // and or removing enemies from combat
-  React.useEffect(() => {}, [enemies]);
+  React.useEffect(() => {
+    let deadEnemy = [];
+    enemies.forEach((e, i) => {
+      if (e.hp <= e.damage) {
+        deadEnemy.push(i);
+      }
+    });
+    if (deadEnemy.length) {
+      let enemiesDupe = [...enemies];
+      deadEnemy.forEach((index) => {
+        enemiesDupe.splice(index, 1);
+      });
+      setEnemies(enemiesDupe);
+    }
+    if (enemies.length <= deadEnemy.length) {
+      // win condition
+    }
+  }, [enemies]);
 
   //deck, hand, discard
 
