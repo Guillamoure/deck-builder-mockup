@@ -6,7 +6,7 @@ const Hand = (props) => {
     <article
       style={{
         display: "flex",
-        justifyContent: "space-between",
+        justifyContent: "space-evenly",
         flexWrap: "wrap",
       }}
     >
