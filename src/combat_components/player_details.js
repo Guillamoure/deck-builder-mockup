@@ -1,6 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import hpBar from "../utils/hp_bar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShieldBlank, faMoon } from "@fortawesome/free-solid-svg-icons";
 
 const PlayerDetails = (props) => {
   const { maxHP, characters, damage } = useSelector((state) => state.deck);
@@ -28,11 +30,13 @@ const PlayerDetails = (props) => {
         <span>
           {currentHP}/{maxHP} HP
         </span>
-        <div>{shield} Shield</div>
+        <div>
+          <FontAwesomeIcon icon={faShieldBlank} size="2x" /> {shield}
+        </div>
       </div>
       <div>
-        <p>
-          <strong>Mana</strong> {props.mana}/3
+        <p style={{ color: "#048ba8" }}>
+          <FontAwesomeIcon icon={faMoon} size="2x" /> {props.mana}/3
         </p>
       </div>
     </div>

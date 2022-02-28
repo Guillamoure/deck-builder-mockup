@@ -7,6 +7,7 @@ const cards = [
     baseValue: 3,
     target: true,
     tags: "Attack",
+    src: "axe.png",
   },
   {
     name: "Block",
@@ -17,6 +18,7 @@ const cards = [
     target: false,
     shield: true,
     tags: "Defend",
+    src: "shield.png",
   },
   {
     name: "Valor",
@@ -28,6 +30,7 @@ const cards = [
     shield: false,
     heal: true,
     tags: "Status",
+    src: "valor.png",
   },
   {
     name: "Assault",
@@ -39,6 +42,7 @@ const cards = [
     shield: false,
     heal: false,
     tags: "Attack",
+    src: "assault.png",
   },
   {
     name: "Disable",
@@ -52,6 +56,7 @@ const cards = [
     weaken: true,
     weakenAmount: 2,
     tags: "Status",
+    src: "disable.png",
   },
   {
     name: "Bolster",
@@ -69,6 +74,7 @@ const cards = [
     strengthAmount: 1,
     strengthDuration: 1,
     tags: "Status",
+    src: "bolster.png",
   },
   {
     name: "Protect",
@@ -85,6 +91,7 @@ const cards = [
     strengthAmount: 0,
     strengthDuration: 0,
     tags: "Defend",
+    src: "protect.png",
   },
 ];
 

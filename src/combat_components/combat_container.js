@@ -251,6 +251,7 @@ const CombatContainer = () => {
         currentDeck={currentDeck}
         discardPile={discardPile}
         setTurn={setTurn}
+        mana={mana}
       />
     </section>
   );
